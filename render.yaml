@@ -1,0 +1,76 @@
+services:
+  - type: web
+    name: ofertaco-prod
+    runtime: docker
+    branch: prod
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_USERNAME
+        sync: false
+      - key: APP_PASSWORD
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: LOCK_SETTINGS
+        value: "true"
+      - key: AI_PROVIDER
+        value: "gemini"
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: "gemini-2.5-flash"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: "gpt-4o-mini"
+      - key: FIRECRAWL_API_KEY
+        sync: false
+      - key: FIRECRAWL_MODE
+        value: "fallback"
+      - key: USE_PLAYWRIGHT_FALLBACK
+        value: "true"
+      - key: STORE_TIMEOUT_SECONDS
+        value: "25"
+      - key: MAX_RESULTS_PER_STORE
+        value: "10"
+
+  - type: web
+    name: ofertaco-dev
+    runtime: docker
+    branch: dev
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_USERNAME
+        sync: false
+      - key: APP_PASSWORD
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: LOCK_SETTINGS
+        value: "false"
+      - key: AI_PROVIDER
+        value: "gemini"
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: "gemini-2.5-flash"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: "gpt-4o-mini"
+      - key: FIRECRAWL_API_KEY
+        sync: false
+      - key: FIRECRAWL_MODE
+        value: "fallback"
+      - key: USE_PLAYWRIGHT_FALLBACK
+        value: "true"
+      - key: STORE_TIMEOUT_SECONDS
+        value: "25"
+      - key: MAX_RESULTS_PER_STORE
+        value: "10"

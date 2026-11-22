@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.env.*
+*.key
+*.pem
+data/settings.json
+data/history.json
+data/users.json
+data/secret.key
+.git/

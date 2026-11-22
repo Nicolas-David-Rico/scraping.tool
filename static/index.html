@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OfertaCO — Comparador Local de Grandes Superficies en Colombia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      var saved = localStorage.getItem("ofertaco-theme");
+      var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      if (dark) document.documentElement.setAttribute("data-theme", "dark");
+    })();
+  </script>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app-root">
+    <!-- Global Nav (44px Pure Black) -->
+    <nav class="global-nav" aria-label="Navegación global">
+      <div class="global-nav-inner">
+        <div class="global-nav-left">
+          <button class="global-nav-btn mobile-only" id="openSidebarBtn" type="button" title="Abrir menú" aria-label="Abrir menú">☰</button>
+          <a href="#" class="global-brand" id="globalBrandLink" title="OfertaCO">
+            <span class="global-brand-mark">CO</span>
+            <span class="global-brand-name">OfertaCO</span>
+          </a>
+          <span class="global-nav-meta">Colombia · Comparador local en tiempo real</span>
+        </div>
+        <div class="global-nav-right">
+          <button class="global-nav-link" id="themeToggleBtn" type="button" title="Cambiar entre modo claro y oscuro" aria-label="Cambiar tema">Modo oscuro</button>
+          <button class="global-nav-link" id="changePwdBtn" type="button" title="Cambiar contraseña">Contraseña</button>
+          <button class="btn-dark-utility" id="logoutBtn" type="button" title="Cerrar sesión">Salir</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="app-shell">
+      <!-- Sidebar (Parchment surface) -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="brand">
+            <div class="brand-logo">CO</div>
+            <div>
+              <div class="brand-name">OfertaCO</div>
+              <div class="brand-sub">Scraping local · Colombia</div>
+            </div>
+          </div>
+          <button class="btn-icon-circular mobile-only" id="closeSidebarBtn" type="button" title="Cerrar menú" aria-label="Cerrar menú">✕</button>
+        </div>
+
+        <button class="btn-new-chat" id="newChatBtn" type="button">
+          <span>＋</span> Nueva búsqueda
+        </button>
+
+        <div class="sidebar-section">
+          <div class="section-label">
+            <span>Tiendas activas</span>
+            <button class="link-btn" id="toggleAllStoresBtn" type="button">Todas</button>
+          </div>
+          <div class="store-toggles" id="storeToggles"></div>
+        </div>
+
+        <div class="sidebar-section history-section">
+          <div class="section-label">
+            <span>Historial local</span>
+          </div>
+          <div class="history-list" id="historyList">
+            <div class="empty-hint">Tus búsquedas aparecerán aquí</div>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <button class="settings-trigger" id="openSettingsBtn" type="button">
+            <span class="ai-status-dot" id="aiStatusDot"></span>
+            <span class="settings-trigger-text">
+              <strong>Configuración IA</strong>
+              <small id="aiStatusLabel">Cargando...</small>
+            </span>
+            <span class="gear" aria-hidden="true">⚙</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main workspace -->
+      <main class="workspace">
+        <!-- Frosted Sub-Nav (52px Parchment 80% + backdrop blur) -->
+        <header class="topbar">
+          <div class="topbar-left">
+            <div class="topbar-title" id="topbarTitle">Comparador de ofertas en Colombia</div>
+          </div>
+          <div class="topbar-actions">
+            <button class="btn-secondary-pill hidden" id="exportCsvBtn" type="button" title="Descargar comparativa en Excel/CSV">
+              Exportar CSV
+            </button>
+            <button class="btn-pearl-capsule" id="topSettingsBtn" type="button">IA y opciones</button>
+          </div>
+        </header>
+
+        <!-- Chat Feed -->
+        <section class="chat-feed" id="chatFeed">
+          <div class="welcome-view" id="welcomeView">
+            <!-- Product Tile Light (Pure White Canvas) -->
+            <div class="hero-tile">
+              <div class="hero-tile-inner">
+                <p class="welcome-eyebrow">Grandes superficies en tiempo real · 100% local</p>
+                <h1>Encuentra el mejor precio en Colombia.</h1>
+                <p class="welcome-sub">
+                  Escribe la referencia exacta o el producto que buscas. Consultaremos simultáneamente
+                  <strong>Éxito, Alkosto, Falabella, Jumbo, Olímpica, Homecenter y Mercado Libre</strong>
+                  para mostrarte precios, descuentos, promociones con tarjeta y enlaces directos.
+                </p>
+
+                <div class="example-prompts">
+                  <button type="button" class="example-chip" data-prompt="Televisor Samsung 55 pulgadas 4K">Televisor Samsung 55" 4K</button>
+                  <button type="button" class="example-chip" data-prompt="iPhone 15 128GB">iPhone 15 128GB</button>
+                  <button type="button" class="example-chip" data-prompt="Freidora de aire Oster 4 litros">Freidora de aire Oster</button>
+                  <button type="button" class="example-chip" data-prompt="PlayStation 5 Slim">PlayStation 5 Slim</button>
+                  <button type="button" class="example-chip" data-prompt="Portátil Lenovo Ryzen 5 menos de 2.5 millones">Portátil Ryzen 5 &lt; $2.5M</button>
+                  <button type="button" class="example-chip" data-prompt="Audífonos Sony WH-1000XM5">Sony WH-1000XM5</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Alternating Dark Tile (#272729) -->
+            <div class="showcase-tile-dark">
+              <div class="showcase-tile-inner">
+                <h2 class="showcase-title">Siete tiendas. Una sola comparativa.</h2>
+                <p class="showcase-lead">
+                  Ejecutado directamente desde tu equipo, con análisis inteligente de precios, descuentos y beneficios con tarjeta aliada.
+                </p>
+                <div class="showcase-stores">
+                  <span>Éxito</span>
+                  <span>Alkosto</span>
+                  <span>Falabella</span>
+                  <span>Jumbo</span>
+                  <span>Olímpica</span>
+                  <span>Homecenter</span>
+                  <span>Mercado Libre</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="messages-container" id="messagesContainer"></div>
+        </section>
+
+        <!-- Floating Sticky Composer Bar -->
+        <footer class="composer-wrap">
+          <div class="composer-mode-bar hidden" id="composerModeBar">
+            <button type="button" class="mode-pill active" id="modeSearchBtn" data-mode="search">Nueva búsqueda en tiendas</button>
+            <button type="button" class="mode-pill" id="modeFollowupBtn" data-mode="followup">Preguntar sobre estos resultados</button>
+          </div>
+          <form class="composer" id="chatForm">
+            <textarea
+              id="chatInput"
+              rows="1"
+              placeholder="Ej: Televisor LG 55 OLED, referencia SM-S928B, o 'nevera Haceb no frost menos de 2 millones'..."
+              autocomplete="off"
+            ></textarea>
+            <button type="submit" class="send-btn" id="sendBtn" title="Buscar ofertas">
+              <span id="sendBtnText">Buscar</span>
+              <span class="send-arrow" aria-hidden="true">→</span>
+            </button>
+          </form>
+          <div class="composer-footnote">
+            El scraping se ejecuta directamente desde tu PC. Los precios pueden variar según disponibilidad o medio de pago en cada tienda.
+          </div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-backdrop hidden" id="settingsModal">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle">
+      <div class="modal-header">
+        <div>
+          <h2 id="settingsModalTitle">Configuración de IA y Scraping</h2>
+          <p>Tu API key se guarda solo en tu computador (<code>data/settings.json</code>).</p>
+        </div>
+        <button class="btn-icon-circular" id="closeSettingsBtn" type="button" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Proveedor de IA</label>
+          <div class="provider-tabs">
+            <button type="button" class="provider-tab active" data-provider="gemini">
+              <strong>Google Gemini</strong>
+              <span>Recomendado · Tier gratuito</span>
+            </button>
+            <button type="button" class="provider-tab" data-provider="openai">
+              <strong>OpenAI</strong>
+              <span>GPT-4o-mini / GPT-4.1</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="geminiFields" class="provider-fields">
+          <div class="form-group">
+            <label for="geminiApiKey">Gemini API Key</label>
+            <input type="password" id="geminiApiKey" placeholder="AIza..." autocomplete="off" />
+            <small class="field-hint">
+              Consíguela en <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>.
+              <span id="geminiKeyStatus"></span>
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="geminiModel">Modelo Gemini</label>
+            <input type="text" id="geminiModel" value="gemini-2.5-flash" />
+          </div>
+        </div>
+
+        <div id="openaiFields" class="provider-fields hidden">
+          <div class="form-group">
+            <label for="openaiApiKey">OpenAI API Key</label>
+            <input type="password" id="openaiApiKey" placeholder="sk-..." autocomplete="off" />
+            <small class="field-hint">
+              Consíguela en <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">OpenAI Platform</a>.
+              <span id="openaiKeyStatus"></span>
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="openaiModel">Modelo OpenAI</label>
+            <input type="text" id="openaiModel" value="gpt-4o-mini" />
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="form-group">
+          <label for="firecrawlApiKey">Firecrawl API Key (opcional)</label>
+          <input type="password" id="firecrawlApiKey" placeholder="fc-..." autocomplete="off" />
+          <small class="field-hint">
+            Consíguela en <a href="https://www.firecrawl.dev/app/api-keys" target="_blank" rel="noopener">Firecrawl Dashboard</a>.
+            <span id="firecrawlKeyStatus"></span>
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="firecrawlMode">Modo de Firecrawl</label>
+          <select id="firecrawlMode" class="form-select">
+            <option value="fallback">Respaldo automático (cuando una tienda falla o bloquea)</option>
+            <option value="primary">Motor principal (extraer todas las tiendas con Firecrawl)</option>
+            <option value="off">Desactivado (solo scrapers locales)</option>
+          </select>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="maxResultsInput">Resultados máx. por tienda</label>
+            <input type="number" id="maxResultsInput" min="3" max="20" value="10" />
+          </div>
+          <div class="form-group">
+            <label for="timeoutInput">Timeout por tienda (seg)</label>
+            <input type="number" id="timeoutInput" min="10" max="60" value="25" />
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="playwrightCheckbox" checked />
+          <span>
+            <strong>Usar navegador Chromium (Playwright) como respaldo</strong>
+            <small>Permite extraer precios en tiendas con renderizado JavaScript o protección anti-bot.</small>
+          </span>
+        </label>
+
+        <div class="test-result hidden" id="aiTestResult"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-pearl-capsule" id="testAiBtn">Probar IA</button>
+        <button type="button" class="btn-pearl-capsule" id="testFirecrawlBtn">Probar Firecrawl</button>
+        <div class="spacer"></div>
+        <button type="button" class="btn-ghost" id="cancelSettingsBtn">Cancelar</button>
+        <button type="button" class="btn-primary" id="saveSettingsBtn">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
